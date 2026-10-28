@@ -1,16 +1,10 @@
 require('dotenv').config();
 const http = require('http');
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
 const { Server } = require('socket.io');
 
+const app = require('./app');
 const connectDB = require('./config/db');
-const routes = require('./routes');
 const Seat = require('./models/Seat');
-const { notFound, errorHandler } = require('./middleware/error');
-const { apiLimiter } = require('./middleware/rateLimit');
 const { setIO, emitSeats } = require('./utils/realtime');
 
 if (!process.env.JWT_SECRET) {
@@ -18,8 +12,6 @@ if (!process.env.JWT_SECRET) {
   process.exit(1);
 }
 
-const app = express();
-app.set('trust proxy', 1); // behind nginx in Docker: use the real visitor IP for rate limiting
 const server = http.createServer(app);
 const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
 
@@ -29,15 +21,6 @@ io.on('connection', (socket) => {
   socket.on('show:join', (showId) => socket.join(`show:${showId}`));
   socket.on('show:leave', (showId) => socket.leave(`show:${showId}`));
 });
-
-app.use(helmet());
-app.use(cors({ origin: clientUrl, credentials: true }));
-app.use(express.json({ limit: '1mb' }));
-if (process.env.NODE_ENV !== 'test') app.use(morgan('dev'));
-
-app.use('/api', apiLimiter, routes);
-app.use(notFound);
-app.use(errorHandler);
 
 // Release seat holds that ran out of time, and tell everyone watching that show
 async function releaseExpiredHolds() {

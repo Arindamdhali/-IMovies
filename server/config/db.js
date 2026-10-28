@@ -1,9 +1,15 @@
 const mongoose = require('mongoose');
 
+let isConnected = false;
+
 module.exports = async function connectDB() {
+  if (isConnected || mongoose.connection.readyState >= 1) {
+    return;
+  }
   const uri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/imovies';
   mongoose.set('strictQuery', true);
   await mongoose.connect(uri);
+  isConnected = true;
   // Replace the old text index (it broke saving movies with language 'Hindi') with the fixed one.
   try {
     await require('../models/Movie').syncIndexes();

@@ -45,6 +45,27 @@ Open http://localhost:5173. The dev server proxies `/api` and the socket connect
 
 `start-imovies.bat` detects an Atlas string and skips the local MongoDB step. Never share or commit this string, it contains your password.
 
+---
+
+### Deploy to Vercel
+
+The project is pre-configured with `vercel.json` for seamless Vercel deployment:
+
+1. **Push your code to GitHub**:
+   ```bash
+   git push -u origin main
+   ```
+2. In [Vercel](https://vercel.com), click **Add New Project** and select your `IMovies` repository.
+3. **Environment Variables**: Add these in the Vercel project settings:
+   - `MONGO_URI`: Your MongoDB Atlas connection string (`mongodb+srv://...`)
+   - `JWT_SECRET`: A long random secret key
+   - `TMDB_API_KEY`: *(Optional)* Your free TMDB API key for real movies
+4. Click **Deploy**. Vercel will automatically build the Vite frontend (`client/dist`) and serve the API routes via serverless functions at `/api/*`.
+
+> **Note on Standalone Deployment**: If you prefer hosting the backend on Render/Railway/Fly.io and only frontend on Vercel: set Root Directory to `client` on Vercel and add `VITE_API_URL=https://your-backend.onrender.com`.
+
+---
+
 ### Run with Docker (no Node or MongoDB install needed)
 
 Install Docker Desktop and start it, then double-click `start-docker.bat` (Windows) or run `docker compose up -d --build` after copying `.env.example` to `.env` and setting `JWT_SECRET`. It starts MongoDB, the API and the website, loads the demo data and opens http://localhost:8080.
@@ -100,12 +121,14 @@ server/
   middleware/    auth (protect, adminOnly, optionalAuth), error, rateLimit
   routes/index.js
   utils/         helpers, realtime (socket broadcast)
-  seed.js  server.js
+  app.js   server.js   seed.js
 client/
   src/
     pages/       Home Movies MovieDetail SeatSelection Checkout BookingView MyBookings Auth Admin
     components/  Navbar Poster MovieCard Modal Pager DateStrip Ticket ProtectedRoute Footer
     features/authSlice.js   context/CityContext.jsx   index.css
+api/
+  index.js       (Vercel serverless entry point)
 ```
 
 ## API summary
