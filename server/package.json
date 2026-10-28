@@ -2,6 +2,7 @@
   "name": "imovies-server",
   "version": "1.0.0",
   "description": "IMovies REST API - Express, MongoDB, JWT, Socket.io",
+  "author": "Arindam Dhali",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

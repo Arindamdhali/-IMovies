@@ -1,11 +1,14 @@
-<<<<<<< HEAD
 # IMovies
 
-A MERN cinema booking site: browse movies, pick a showtime, choose exact seats on a live seat map, pay (simulated) and keep your tickets.
+> **Developed & Maintained by [Arindam Dhali](https://github.com/Arindam-Dhali)**
 
-- **Frontend:** React 18, Vite, Bootstrap 5 plus custom CSS, Redux Toolkit, React Router, Socket.io client
-- **Backend:** Express, MongoDB (Mongoose), JWT, bcryptjs, Socket.io, Helmet, express-rate-limit
-- **Look:** dark cinematic theme, generated poster art (no image files needed), curved-screen seat map, paper ticket
+A modern MERN cinema booking platform: browse movies, pick a showtime, choose exact seats on a live interactive seat map, pay (simulated) and manage your tickets.
+
+- **Frontend:** React 18, Vite, Bootstrap 5 + custom CSS, Redux Toolkit, React Router, Socket.io client
+- **Backend:** Node.js, Express, MongoDB (Mongoose), JWT, bcryptjs, Socket.io, Helmet, express-rate-limit
+- **Look & Feel:** Dark cinematic theme, responsive layout, generated poster art fallback, curved-screen seat map, authentic paper tickets
+
+---
 
 ## Run it
 
@@ -16,14 +19,14 @@ A MERN cinema booking site: browse movies, pick a showtime, choose exact seats o
 You need Node 18+ and MongoDB running locally (or a MongoDB Atlas connection string).
 
 ```bash
-# 1. API
+# 1. API (Backend)
 cd server
 cp .env.example .env        # then set JWT_SECRET to a long random string
 npm install
 npm run seed                # demo movies, theatres, a week of shows, 2 accounts
 npm run dev                 # http://localhost:5000
 
-# 2. Website (new terminal)
+# 2. Website (Frontend - in a new terminal)
 cd client
 npm install
 npm run dev                 # http://localhost:5173
@@ -75,11 +78,12 @@ To refresh the movie list later, double-click `update-movies.bat` (Docker: `dock
 
 Change both passwords before putting this anywhere public. `npm run seed:reset` wipes the database and reseeds it.
 
-## What you can do
+## Features
 
-- **Browse and filter** by title, genre, language, city, date and sort order, with pagination
+- **Browse and filter** by title, genre, language, city, date and sort order, with responsive pagination
 - **Pick a show** on a 7-day date strip, grouped by theatre, with "filling fast" and "sold out" states
 - **Choose seats** on a map with Standard, Premium and Recliner tiers. Seats other people book appear instantly (Socket.io)
+- **Mobile Bottom Dock:** quick checkout summary when picking seats on mobile screens
 - **Seat holds:** pressing Continue holds your seats for 5 minutes (`SEAT_HOLD_MINUTES`). Expired holds are released automatically
 - **Pay** by card, UPI or wallet (simulated). Test failures: card ending `0000`, or a UPI ID starting `fail`
 - **Tickets and history:** upcoming, past and cancelled tabs. Cancel up to 2 hours before the show; seats are released and the payment is marked refunded
@@ -135,9 +139,12 @@ Seats are real documents with a status (`available`, `locked`, `booked`). Lockin
 - The token is stored in `localStorage` for simplicity. For production, consider an httpOnly cookie
 - Payments are simulated. Replace `simulateGateway` in `bookingController.js` with Razorpay or Stripe before taking real money
 
-## Ideas for next steps
+## Author
 
-Multi-language poster images, food add-ons, email tickets, promo codes, seat-map editor for admins, automated tests (Jest + Supertest for the API).
-=======
-# IMovies
->>>>>>> 3c701bfa6c3e7961a5c27db03cd1f32d93fe3179
+**Arindam Dhali**
+- GitHub: [@Arindam-Dhali](https://github.com/Arindam-Dhali)
+- Repository: [IMovies](https://github.com/Arindam-Dhali/IMovies)
+
+## License
+
+This project is licensed under the MIT License.

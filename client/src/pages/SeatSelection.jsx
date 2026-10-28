@@ -139,7 +139,7 @@ export default function SeatSelection() {
   };
 
   return (
-    <div className="container page">
+    <div className={`container page ${chosen.length > 0 && !started ? 'has-dock' : ''}`}>
       <div className="show-bar">
         <div>
           <Link to={`/movies/${show.movie._id}`} className="small text-muted-2">‹ All showtimes</Link>
@@ -164,6 +164,10 @@ export default function SeatSelection() {
         <section aria-label="Seat map">
           <div className="screen-wrap"><div className="screen" /></div>
           <div className="screen-label">Screen this way</div>
+
+          <div className="seatmap-hint d-md-none" aria-hidden="true">
+            <span>‹ Swipe map horizontally to view all seats ›</span>
+          </div>
 
           <div className="seatmap">
             <div className="seatmap-inner" role="group" aria-label="Seats">
@@ -221,6 +225,18 @@ export default function SeatSelection() {
           <p className="hint mt-3 mb-0">We hold your seats for {data.holdMinutes} minutes once you continue, so nobody else can take them while you pay.</p>
         </aside>
       </div>
+
+      {chosen.length > 0 && !started && (
+        <div className="mobile-dock d-lg-none" aria-label="Mobile checkout bar">
+          <div className="mobile-dock-info">
+            <span className="mobile-dock-seats">{chosen.length} {chosen.length === 1 ? 'seat' : 'seats'} ({chosen.map((s) => s.label).join(', ')})</span>
+            <span className="mobile-dock-total">{rupee(subtotal + fee)}</span>
+          </div>
+          <button className="btn btn-brand mobile-dock-btn" disabled={busy} onClick={proceed}>
+            {busy ? 'Holding…' : user ? 'Continue' : 'Sign in'}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -6,11 +6,30 @@ import { useCity } from '../context/CityContext';
 import api from '../api';
 
 const Logo = () => (
-  <svg viewBox="0 0 64 64" aria-hidden="true">
+  <svg viewBox="0 0 64 64" aria-hidden="true" width="28" height="28">
     <rect width="64" height="64" rx="14" fill="#c0264a" />
     <rect x="14" y="16" width="36" height="32" rx="4" fill="none" stroke="#f3e9d7" strokeWidth="4" />
     <path d="M28 25l12 7-12 7z" fill="#e6b457" />
   </svg>
+);
+
+const BellIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+  </svg>
+);
+
+const MenuIcon = ({ open }) => (
+  open ? (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M18 6L6 18M6 6l12 12" />
+    </svg>
+  ) : (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  )
 );
 
 export default function Navbar() {
@@ -73,10 +92,15 @@ export default function Navbar() {
       <div className="container">
         <div className="bar">
           <Link to="/" className="brand" aria-label="IMovies home">
-            <Logo /> IMovies
+            <Logo /> <span>IMovies</span>
           </Link>
-          <button className="icon-btn nav-toggle" onClick={() => setOpen((o) => !o)} aria-label="Toggle menu" aria-expanded={open}>
-            ☰
+          <button
+            className="icon-btn nav-toggle"
+            onClick={() => setOpen((o) => !o)}
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
+          >
+            <MenuIcon open={open} />
           </button>
 
           <nav className="nav-links" aria-label="Main">
@@ -89,7 +113,7 @@ export default function Navbar() {
           <div className="nav-tools" ref={wrap}>
             <form className="nav-search" onSubmit={submit} role="search">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" /></svg>
-              <input className="form-control" placeholder="Search movies" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search movies" />
+              <input className="form-control" placeholder="Search movies…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search movies" />
             </form>
 
             <select className="form-select city-select" value={city} onChange={(e) => setCity(e.target.value)} aria-label="Choose your city">
@@ -98,10 +122,10 @@ export default function Navbar() {
             </select>
 
             {user ? (
-              <>
+              <div className="nav-user-actions">
                 <div className="menu-wrap">
                   <button className="icon-btn" onClick={openBell} aria-label={`Notifications, ${notes.unread} unread`}>
-                    🔔
+                    <BellIcon />
                     {notes.unread > 0 && <span className="dot">{notes.unread}</span>}
                   </button>
                   {bell && (
@@ -129,12 +153,12 @@ export default function Navbar() {
                     </div>
                   )}
                 </div>
-              </>
+              </div>
             ) : (
-              <>
+              <div className="nav-auth-actions">
                 <Link to="/login" className="btn btn-ghost">Sign in</Link>
                 <Link to="/register" className="btn btn-brand">Create account</Link>
-              </>
+              </div>
             )}
           </div>
         </div>
